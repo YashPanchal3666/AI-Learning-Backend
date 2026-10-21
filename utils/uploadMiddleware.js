@@ -1,0 +1,20 @@
+
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+
+const uploadMiddleware = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith("image/")) {
+            cb(null, true);
+        } else {
+            cb(new Error("Only image files are allowed"));
+        }
+    }
+});
+
+export default uploadMiddleware;
