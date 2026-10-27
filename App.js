@@ -5,6 +5,7 @@ import "dotenv/config";
 import connectDb from "./Config/db.js";
 import userRoute from "./route/userRoute.js";
 import googleRoute from "./route/googleRoute.js";
+import uploadRoute from "./route/uploadRoute.js";
 import "./Config/googleConfig.js";
 
 const app = express();
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 
 // API routes
 app.use("/api", userRoute);
+app.use("/api", uploadRoute);
 
 
 // Database + Server

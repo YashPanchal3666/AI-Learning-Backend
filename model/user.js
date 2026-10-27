@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -32,11 +31,21 @@ const userSchema = new mongoose.Schema({
         default: "user"
     },
 
-    image: {
+    otp: {
         type: String,
-        default: ""
+        default: null
+    },
+
+    otpExpires: {
+        type: Date,
+        default: null
+    },
+
+    isVerified: {
+        type: Boolean,
+        default: false
     }
-});
+}, { timestamps: true });
 
 const userData = mongoose.model("User", userSchema);
 

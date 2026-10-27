@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
     addUser,
     getUser,
@@ -8,62 +7,41 @@ import {
     updateUser,
     loginuser,
     getMyProfile,
-    forgotPassword
+    forgotPassword,
+    verifyOtp,
+    resendOtp,
+    resetPassword
 } from "../controller/userDataController.js";
 
 import authMiddleware from "../utils/authMiddleware.js";
 
-import uploadMiddleware from "../utils/uploadMiddleware.js";
-import { uploadImage } from "../controller/userDataController.js";
-
 const router = express.Router();
 
-
 // ==========================================
-// PUBLIC ROUTES
+// PUBLIC AUTH & USER ROUTES
 // ==========================================
-
 router.post("/login", loginuser);
+router.post("/adduser", addUser);
 
-
+// ==========================================
+// EMAIL & OTP VERIFICATION ROUTES (BREVO)
+// ==========================================
+router.post("/verify-otp", verifyOtp);
+router.post("/resend-otp", resendOtp);
 router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
+// ==========================================
+// CRUD USER ROUTES
+// ==========================================
 router.get("/users", getUser);
-
 router.get("/users/:uid", getSingleUser);
-
-
+router.put("/users/:uid", updateUser);
 router.delete("/users/:uid", deleteUser);
-
-// Add user with profile image
-router.post(
-    "/adduser",
-    uploadMiddleware.single("image"),
-    addUser
-);
-
-// Update user with optional profile image
-router.put(
-    "/users/:uid",
-    uploadMiddleware.single("image"),
-    updateUser
-);  
-
-router.post(
-    "/upload-image",
-    uploadMiddleware.single("image"),
-    uploadImage
-);
 
 // ==========================================
 // PROTECTED PROFILE
 // ==========================================
-
-router.get(
-    "/me",
-    authMiddleware,
-    getMyProfile
-);
-
+router.get("/me", authMiddleware, getMyProfile);
 
 export default router;
