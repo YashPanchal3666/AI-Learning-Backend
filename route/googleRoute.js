@@ -1,7 +1,12 @@
+
 import express from "express";
 import passport from "../Config/googleConfig.js";
 
 const router = express.Router();
+
+const FRONTEND_URL =
+    process.env.FRONTEND_URL ||
+    "http://localhost:3000";
 
 router.get(
     "/google",
@@ -14,12 +19,10 @@ router.get(
     "/google/callback",
     passport.authenticate("google", {
         session: false,
-        failureRedirect: "http://localhost:3000/login"
+        failureRedirect: `${FRONTEND_URL}/login`
     }),
     (req, res) => {
-
         try {
-
             const token = req.user.token;
             const user = req.user.user;
 
@@ -35,19 +38,16 @@ router.get(
             );
 
             res.redirect(
-                `http://localhost:3000/google-success?token=${token}&user=${userData}`
+                `${FRONTEND_URL}/google-success?token=${encodeURIComponent(token)}&user=${userData}`
             );
 
         } catch (error) {
-
             console.error(
                 "Google Callback Error:",
                 error
             );
 
-            res.redirect(
-                "http://localhost:3000/login"
-            );
+            res.redirect(`${FRONTEND_URL}/login`);
         }
     }
 );
